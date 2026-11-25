@@ -48,17 +48,29 @@
 
 保存入口后，用所选客户端和 profile 启动新会话，确认实际后端读到了本次检出的 `SYSTEM.md`，并能按触发条件找到同一目录中的专项文件。
 
-## 使用方案推荐
+## 推荐接入方式
 
-三种方案按投入从小到大排列，可以只选一种，也可以叠加。
+把本仓库当作唯一规则源，宿主入口只保留一块受管引用，不复制任何规则正文。这是最省上下文、也最容易更新的用法。
 
-1. **最小接入。** 仅在客户端用户级入口中写入“先完整读取 `<检出根目录>/SYSTEM.md`”，其余文件由 SYSTEM 的条件规则按需读取。适合先观察一段时间，再决定是否采用其余规范。
-2. **全面接入。** 按上一节完成安装，让 SYSTEM 全量加载 PERFORMANCE、CODING、GIT、TOOLS 等专项规则。适合长期以 agent 为主要开发方式，并接受其中的交付与授权约定。
-3. **按场景挑选。** 只采用需要的部分，例如仅用 [GIT.md](GIT.md) 的提交与 PR 规范，或仅用 [CODING.md](CODING.md) 的验证要求。文件之间用相对链接引用；单独取用某个文件时，按其中的自引用补齐相关文件。
+在客户端的用户级入口文件中加入受管块，标记名可自定，示例用 `myworkflow`：
 
-推荐做法：
+```markdown
+<!-- myworkflow:start -->
+## Shared global rules
 
-- 把本仓库保持在独立目录并用 Git 更新，不要复制进业务仓库，避免两处分叉。
-- 项目级 `AGENTS.md`、`CLAUDE.md` 等只声明读取本检出，具体规则仍写在项目文件中；与本文档冲突时以项目规则为准。
-- 定期 `git pull` 获取上游更新。修改本地副本前先确定是否回馈上游，否则下次更新容易冲突。
-- 首次接入后按“安装与验证”启动一次新会话，确认实际加载的是本次检出。
+Read `<检出根目录>/SYSTEM.md` in full before task actions unless it is already in context. Follow its conditional reading instructions and the active runtime's instruction hierarchy. Report any required file you cannot read.
+<!-- myworkflow:end -->
+```
+
+- 支持导入语法的宿主用导入代替读取指令，例如 Antigravity 的 `@[label](path)`；其余宿主保留上面的文字块。
+- 受管块让更新可控：同步时只替换 `start` 与 `end` 之间的内容，入口中的其他规则不受影响。
+- 专项文件不写进入口。SYSTEM.md 只在触发条件成立时才读 PERFORMANCE、CODING、GIT 等，避免每个会话都付全量上下文成本。
+- 入口中原有的工具类规则放在受管块之外，按宿主自身的加载顺序排列，无需重复。
+
+更新与验证：
+
+- 用 `git pull` 更新本仓库，再按受管块同步入口；不要把规则正文复制到入口或业务仓库。
+- 首次接入或更新后启动新会话，确认客户端读到的是本次检出的 `SYSTEM.md`，并能按条件找到同一目录中的专项文件。
+- 项目级 `AGENTS.md`、`CLAUDE.md` 只声明读取本检出；与本文档冲突时以项目规则为准。
+
+只取少量文件（例如仅用 [GIT.md](GIT.md) 的提交与 PR 规范）也能工作，但会失去条件加载，引用关系需自行维护，因此不作为推荐方式。
