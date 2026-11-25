@@ -1,0 +1,19 @@
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Local caches, backups, and artifacts
+/.cache/
+/.backups/
+/.artifacts/
+*.bak
+*.tmp
+
+# Editor and operating-system files
+*.swp
+*.swo
+*~
+.DS_Store

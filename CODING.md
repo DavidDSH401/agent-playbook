@@ -1,0 +1,27 @@
+# Coding and runnable verification
+
+Read SYSTEM.md first if it is not already loaded.
+
+## Coding tasks
+
+- Before editing, identify affected contracts, how to verify them, and applicable repository lint, type, architecture, and test rules. Choose established public test boundaries, realistic inputs, and verification methods autonomously, including in TDD. Ask only when an unresolved choice would materially change a public contract or acceptance, or when authorization is missing. Continue independent work.
+- Fix shared causes at the owning layer and account for affected callers. Keep mutable state under a clear owner and callers independent of internal details. Reuse fitting solutions and preserve validation, error handling, compatibility, security, and accessibility. Keep unrelated refactors and speculative features out of scope.
+- Enforce stable, checkable constraints at their owning layer. Use types and runtime validation at data boundaries, lint for forbidden constructs, and dependency or module checks for architecture boundaries when they fit. Add or tighten a constraint for a concrete task-related failure. Fix violations while preserving checks and diagnostics, and validate values before trusting their types.
+
+## Verification
+
+- Inspect relevant material, make the complete change, and review the result. Documentation, wording, and formatting changes without runnable behavior impact need focused diff review and applicable static checks.
+- For a defect, reproduce the original failure before editing when practical, then verify the same path after the change.
+- Verify changed runnable behavior in a safe, authorized test environment through affected real UI, API, CLI, job, or library entry points. Exercise representative operations and check expected results and relevant failure or boundary cases. Reuse tests that exercise the same entry point and behavior. Confirm configuration loading when runtime effect is required. Startup, static checks, and mocked tests establish only what they exercise. If a real path cannot run, report the blocker and the specific behavior left unverified.
+- Run the repository's applicable lint, type, architecture, and test checks. For local checks with no production side effects, run them, fix failures caused by the requested change, and rerun affected checks without asking for approval at each step. Report required checks that fail or cannot run as unmet.
+- Verify as you implement and ensure the evidence covers the final change. Reuse still-current evidence from the relevant revision and environment. After a fix or review edit, rerun the affected checks when code or material conditions changed. Do not repeat a valid check solely to create a separate final pass. Follow SYSTEM.md for complete evidence and truthful reporting.
+- Extend existing regression tests first. Add tests for meaningful uncovered behavior, such as a reproducible defect or a security, compatibility, or failure boundary. Use dedicated smoke tests only when necessary startup, integration, or deployment behavior lacks adequate coverage. Add scripts, fixtures, baselines, backups, or audit records for concrete needs. Reuse existing tools, Git history, and recovery facilities where adequate.
+- Use file checksums only when integrity or provenance requires them. Check Git revision identity at the relevant verification or delivery boundary.
+- Beyond the applicable minimum, add steps only for a concrete unresolved question that could change implementation, safety, or acceptance, or when required by the task, project, or runtime. Preserve necessary authorization, security, data protection, compatibility, and recovery measures, along with existing tests, assertions, and gates. Finish once the requested behavior is verified and the required checks are satisfied. At a blocker or imposed limit, preserve results and report what remains.
+
+## Code review and scoring
+
+- Apply this section only when delivering code changes that affect runnable behavior.
+- Before publishing or handing back, review the complete final task diff, including new files, against requirements, repository rules, and verification evidence. Fix supported material findings within scope, review the resulting changes, and verify affected behavior under the evidence reuse rule above before scoring. Use independent review when separately required and authorized.
+- Score the final change out of 100 across **correctness and edge cases (30)**, **lint, types, and architecture (25)**, **tests and runtime evidence (25)**, **readability and maintainability (10)**, and **security, data integrity, and compatibility (10)**. Award each dimension its full weight when supported, half for a minor shortfall with the main obligation met, or zero for a material failure. Mark material evidence gaps as unverified and report those points separately from the verified total. An unmet required gate blocks a delivery pass regardless of score.
+- Report verified points out of 100, any unverified weight, and the result for each dimension. For each low-scoring code finding, give its file and line, minimal relevant excerpt, violated rule or contract, concrete impact, affected dimension score, point deduction, and fix or disposition. Deduct once per underlying issue and make shared deductions explicit. Distinguish findings fixed and reverified from remaining findings. Base the score on the final code and evidence.
