@@ -74,3 +74,18 @@ Read `<检出根目录>/SYSTEM.md` in full before task actions unless it is alre
 - 项目级 `AGENTS.md`、`CLAUDE.md` 只声明读取本检出；与本文档冲突时以项目规则为准。
 
 只取少量文件（例如仅用 [GIT.md](GIT.md) 的提交与 PR 规范）也能工作，但会失去条件加载，引用关系需自行维护，因此不作为推荐方式。
+
+## 外部工具推荐
+
+以下工具与本仓库规则配合使用，按需选装；本仓库不依赖其中任何一个。
+
+| 工具 | 用途 |
+| --- | --- |
+| [RTK](https://github.com/rtk-ai/rtk) | 过滤常见开发命令的输出，减少 agent 读取输出时消耗的 token。 |
+| [context-mode](https://github.com/mksglu/context-mode) | 将大量工具输出保留在本地，供 agent 按需检索，节省上下文空间。 |
+| [Caveman](https://github.com/JuliusBrussee/caveman) | 缩短 agent 的回复并压缩工具输出，原始输出可恢复。 |
+| [codebase-memory-mcp](https://github.com/DeusData/codebase-memory-mcp) | 在本地持久化代码、文档和基础设施的关系图，支持通过 MCP 查询和按变更选择测试。 |
+| [Graphify](https://github.com/Graphify-Labs/graphify) | 将代码、文档、SQL 模式、配置和 PDF 整理成可查询的知识图谱。 |
+| [Hindsight](https://github.com/vectorize-io/hindsight) | 让 agent 从过往任务中积累经验，供后续任务复用。 |
+| [mattpocock/skills](https://github.com/mattpocock/skills) | 为代码审查、调试和测试驱动开发等工程任务提供可复用的 agent 技能。 |
+| [Ponytail](https://github.com/DietrichGebert/ponytail) | 引导 agent 用足以解决问题的最小改动完成任务，减少过度设计。 |
